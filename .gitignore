@@ -1,0 +1,49 @@
+# Salesforce DX
+.sfdx/
+.localdevserver/
+deploy/
+
+# LWC VSCode
+.vscode/
+jsconfig.json
+
+# Logs
+*.log
+npm-debug.log*
+pglite-debug.log
+
+# Dependency directories
+node_modules/
+
+# ESLint cache
+.eslintcache
+
+# MacOS
+.DS_Store
+
+# Windows
+Thumbs.db
+ehthumbs.db
+
+# Claude AI artifacts
+.claude/
+
+# Temporary files
+*.tmp
+*.temp
+
+# IDE files
+.idea/
+*.iml
+*.swp
+*.swo
+
+# Salesforce
+.forceignore
+
+# Environment files
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local

@@ -1,0 +1,110 @@
+<template>
+    <div class="slds-card slds-card_boundary">
+        <div class="slds-card__body slds-card__body_inner">
+            <!-- Search and Filter Controls -->
+            <div class="search-container">
+                <lightning-input
+                    type="search"
+                    placeholder="Search opportunities..."
+                    value={searchTerm}
+                    onchange={handleSearch}>
+                </lightning-input>
+            </div>
+            
+            <div class="select-controls">
+                <div class="slds-text-color_weak slds-text-body_small">
+                    {selectedCount} of {totalCount} selected
+                </div>
+                <lightning-button
+                    if:false={allSelected}
+                    label="Select All"
+                    onclick={selectAll}
+                    variant="neutral"
+                    size="small">
+                </lightning-button>
+                <lightning-button
+                    if:true={allSelected}
+                    label="Deselect All"
+                    onclick={deselectAll}
+                    variant="neutral"
+                    size="small">
+                </lightning-button>
+            </div>
+
+            <!-- Opportunities List -->
+            <div class="slds-scrollable_y opportunity-list-container">
+                <template if:true={displayedOpportunities}>
+                    <template for:each={displayedOpportunities} for:item="opportunity">
+                        <div key={opportunity.Id} class={opportunity.cssClass} onclick={handleOpportunityClick} data-id={opportunity.Id}>
+                            <div class="slds-grid slds-grid_align-spread slds-grid_vertical-align-center opportunity-row">
+                                <!-- Selection Button -->
+                                <div class="slds-col slds-shrink-none">
+                                    <button class={opportunity.buttonClass} data-id={opportunity.Id}>
+                                        <lightning-icon icon-name={opportunity.iconName} size="small"></lightning-icon>
+                                        <span class="slds-assistive-text">{opportunity.buttonLabel}</span>
+                                    </button>
+                                </div>
+                                
+                                <!-- Opportunity Details -->
+                                <div class="slds-col slds-has-flexi-truncate opportunity-info">
+                                    <div class="opportunity-header">
+                                        <h3 class="slds-truncate" title={opportunity.Name}>
+                                            {opportunity.Name}
+                                        </h3>
+                                        <span class="opportunity-amount">
+                                            {opportunity.formattedAmount}
+                                        </span>
+                                    </div>
+                                    <div class="opportunity-details">
+                                        <div class="slds-grid slds-wrap slds-gutters_x-small">
+                                            <div class="slds-col slds-size_1-of-2">
+                                                <span class="slds-text-color_weak">Stage:</span> {opportunity.StageName}
+                                            </div>
+                                            <div class="slds-col slds-size_1-of-2">
+                                                <span class="slds-text-color_weak">Close:</span> {opportunity.formattedCloseDate}
+                                            </div>
+                                            <div if:true={opportunity.Quote_Number__c} class="slds-col slds-size_1-of-1">
+                                                <span class="slds-text-color_weak">Quote #:</span> {opportunity.Quote_Number__c}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </template>
+                </template>
+            </div>
+
+            <!-- Loading State -->
+            <div if:true={isLoading} class="slds-text-align_center slds-p-vertical_large">
+                <lightning-spinner alternative-text="Loading opportunities..." size="medium"></lightning-spinner>
+            </div>
+
+            <!-- No Data State -->
+            <div if:true={noOpportunities} class="slds-text-align_center slds-p-vertical_large">
+                <lightning-icon icon-name="utility:info" size="large" class="slds-m-bottom_small"></lightning-icon>
+                <h3 class="slds-text-heading_small">No opportunities found</h3>
+                <p class="slds-text-color_weak">There are no opportunities associated with this account.</p>
+            </div>
+
+            <!-- Error State -->
+            <div if:true={hasError} class="slds-text-align_center slds-p-vertical_large">
+                <lightning-icon icon-name="utility:error" size="large" class="slds-m-bottom_small"></lightning-icon>
+                <h3 class="slds-text-heading_small">Error loading opportunities</h3>
+                <p class="slds-text-color_weak">{errorMessage}</p>
+                <lightning-button label="Retry" onclick={loadOpportunities} class="slds-m-top_small"></lightning-button>
+            </div>
+        </div>
+
+        <!-- Validation Messages -->
+        <div if:true={showValidationError} class="slds-card__footer">
+            <div class="slds-notify slds-notify_alert slds-theme_error">
+                <span class="slds-assistive-text">Error</span>
+                <span class="slds-icon_container slds-icon-utility-error">
+                    <lightning-icon icon-name="utility:error" size="x-small"></lightning-icon>
+                </span>
+                <h2 class="slds-text-heading_small">Please select at least one opportunity to continue.</h2>
+            </div>
+        </div>
+    </div>
+</template>

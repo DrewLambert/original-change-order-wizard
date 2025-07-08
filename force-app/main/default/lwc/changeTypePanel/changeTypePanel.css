@@ -1,0 +1,47 @@
+.change-type-option {
+    border: 1px solid #d8dde6;
+    border-radius: 0.25rem;
+    padding: 0.75rem;
+    margin-bottom: 0.5rem;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    background-color: #ffffff;
+}
+
+.change-type-option:hover {
+    border-color: #1589ee;
+    box-shadow: 0 0 0 1px #1589ee;
+}
+
+.change-type-option.selected {
+    border-color: #04844b;
+    background-color: #f3f9f7;
+    box-shadow: 0 0 0 1px #04844b;
+}
+
+.change-type-option:focus {
+    outline: 2px solid #1589ee;
+    outline-offset: 2px;
+}
+
+.change-type-option .slds-media__figure {
+    margin-right: 0.75rem;
+}
+
+.icon-selected {
+    color: #04844b;
+}
+
+.icon-unselected {
+    color: #747474;
+}
+
+@media (max-width: 768px) {
+    .change-type-option {
+        padding: 0.5rem;
+    }
+    
+    .change-type-option .slds-media__figure {
+        margin-right: 0.5rem;
+    }
+}

@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<LightningComponentBundle xmlns="http://soap.sforce.com/2006/04/metadata">
+    <apiVersion>60.0</apiVersion>
+    <isExposed>true</isExposed>
+    <targets>
+        <target>lightning__RecordPage</target>
+        <target>lightning__AppPage</target>
+        <target>lightning__HomePage</target>
+        <target>lightning__FlowScreen</target>
+    </targets>
+    <targetConfigs>
+        <targetConfig targets="lightning__RecordPage">
+            <objects>
+                <object>Account</object>
+            </objects>
+        </targetConfig>
+        <targetConfig targets="lightning__FlowScreen">
+            <property name="recordId" type="String" />
+            <property name="accountId" type="String" />
+            <property name="preselectedOpportunityIds" type="String[]" />
+            <property name="contractId" type="String" role="outputOnly" />
+            <property name="showWizardHeader" type="Boolean" default="false" />
+            <property name="showStepIcons" type="Boolean" default="false" />
+            <property name="showSummaryStats" type="Boolean" default="false" />
+            <property name="showProductGrid" type="Boolean" default="false" />
+            <property name="enableTwoColumnSummary" type="Boolean" default="false" />
+            <property name="wizardThemeColor" type="String" default="blue" />
+            <property name="maxOpportunities" type="Integer" default="10" />
+            <property name="customHeaderText" type="String" />
+        </targetConfig>
+    </targetConfigs>
+</LightningComponentBundle>

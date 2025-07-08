@@ -1,0 +1,127 @@
+<template>
+    <div class={wizardContainerClass}>
+        <!-- Main Content Area -->
+        <div class="wizard-content">
+            
+            <!-- Step 1: Selection -->
+            <div if:true={isStepOne} class="step-container">
+                <div if:true={showWizardHeader} class="step-header">
+                    <h2 class="step-title">
+                        <lightning-icon if:true={showStepIcons} icon-name="utility:setup" size="small" class="step-icon"></lightning-icon>
+                        {displayHeaderText}
+                    </h2>
+                    <p class="step-description">Select the opportunities and change types for this order</p>
+                </div>
+                
+                <div class="selection-grid">
+                    <div class="selection-panel">
+                        <div class="panel-header">
+                            <lightning-icon if:true={showStepIcons} icon-name="utility:opportunity" size="small" class="panel-icon"></lightning-icon>
+                            <h3 class="panel-title">Select Opportunities</h3>
+                        </div>
+                        <div class="panel-content">
+                            <c-opportunity-selector 
+                                account-id={effectiveAccountId}
+                                onselectionchange={handleOpportunitySelection}
+                                selected-opportunities={selectedOpportunities}
+                                preselected-opportunity-ids={preselectedOpportunityIds}>
+                            </c-opportunity-selector>
+                        </div>
+                    </div>
+                    
+                    <div class="selection-panel">
+                        <div class="panel-header">
+                            <lightning-icon if:true={showStepIcons} icon-name="utility:settings" size="small" class="panel-icon"></lightning-icon>
+                            <h3 class="panel-title">Select Change Types</h3>
+                        </div>
+                        <div class="panel-content">
+                            <c-change-type-panel 
+                                onchangetypeselection={handleChangeTypeSelection}
+                                selected-change-types={selectedChangeTypes}
+                                change-values={changeValues}>
+                            </c-change-type-panel>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Step 2: Product Changes -->
+            <div if:true={isStepTwo} class="step-container">
+                <div if:true={showWizardHeader} class="step-header">
+                    <h2 class="step-title">
+                        <lightning-icon if:true={showStepIcons} icon-name="utility:product" size="small" class="step-icon"></lightning-icon>
+                        Edit Products
+                    </h2>
+                    <p class="step-description">Modify product configurations and pricing</p>
+                </div>
+                
+                <div class="product-editor-container">
+                    <c-product-grid-editor 
+                        opportunity-ids={selectedOpportunities}
+                        onproductchange={handleProductChange}
+                        product-changes={productChanges}>
+                    </c-product-grid-editor>
+                </div>
+            </div>
+
+            <!-- Step 3: Review -->
+            <div if:true={isStepThree} class="step-container">
+                <div if:true={showWizardHeader} class="step-header">
+                    <h2 class="step-title">
+                        <lightning-icon if:true={showStepIcons} icon-name="utility:preview" size="small" class="step-icon"></lightning-icon>
+                        Review & Submit
+                    </h2>
+                    <p class="step-description">Review all changes before submitting the change order</p>
+                </div>
+                
+                <div class="review-container">
+                    <c-summary-review 
+                        selected-opportunities={selectedOpportunities}
+                        opportunity-data={selectedOpportunityData}
+                        selected-change-types={selectedChangeTypes}
+                        change-values={changeValues}
+                        product-changes={productChanges}
+                        onconfirmationchange={handleConfirmationChange}
+                        is-confirmed={isConfirmed}
+                        show-summary-stats={showSummaryStats}
+                        enable-two-column-summary={enableTwoColumnSummary}>
+                    </c-summary-review>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- Action Footer -->
+        <div class="wizard-footer">
+            <div class="action-buttons">
+                <button if:true={showPrevious} class="slds-button slds-button_neutral action-btn" onclick={previousStep}>
+                    <lightning-icon icon-name="utility:chevronleft" size="x-small" class="btn-icon-left"></lightning-icon>
+                    Previous
+                </button>
+                <button if:true={showNext} class="slds-button slds-button_brand action-btn" onclick={nextStep} disabled={nextDisabled}>
+                    Next
+                    <lightning-icon icon-name="utility:chevronright" size="x-small" class="btn-icon-right"></lightning-icon>
+                </button>
+                <button if:true={showSubmit} class="slds-button slds-button_success action-btn submit-btn" onclick={submitChangeOrder} disabled={submitDisabled}>
+                    <lightning-icon icon-name="utility:check" size="x-small" class="btn-icon-left"></lightning-icon>
+                    {submitButtonLabel}
+                </button>
+                <button class="slds-button slds-button_neutral action-btn cancel-btn" onclick={cancelWizard}>
+                    <lightning-icon icon-name="utility:close" size="x-small" class="btn-icon-left"></lightning-icon>
+                    Cancel
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Loading Overlay -->
+    <div if:true={isLoading} class="slds-backdrop slds-backdrop_open">
+        <div class="slds-spinner_container">
+            <div class="slds-spinner slds-spinner_medium">
+                <span class="slds-assistive-text">Loading...</span>
+                <div class="slds-spinner__dot-a"></div>
+                <div class="slds-spinner__dot-b"></div>
+            </div>
+        </div>
+    </div>
+</template>

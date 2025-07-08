@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>New_Pricing_Model__c</fullName>
+    <label>New Pricing Model</label>
+    <required>false</required>
+    <trackTrending>false</trackTrending>
+    <type>Picklist</type>
+    <valueSet>
+        <valueSetDefinition>
+            <sorted>false</sorted>
+            <value>
+                <fullName>All Inclusive</fullName>
+                <default>false</default>
+                <label>All Inclusive</label>
+            </value>
+            <value>
+                <fullName>CBP</fullName>
+                <default>false</default>
+                <label>CBP</label>
+            </value>
+            <value>
+                <fullName>User Payments</fullName>
+                <default>false</default>
+                <label>User Payments</label>
+            </value>
+            <value>
+                <fullName>Foodservice</fullName>
+                <default>false</default>
+                <label>Foodservice</label>
+            </value>
+        </valueSetDefinition>
+    </valueSet>
+</CustomField>

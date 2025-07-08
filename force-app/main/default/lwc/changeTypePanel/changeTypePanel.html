@@ -1,0 +1,253 @@
+<template>
+    <div class="slds-card slds-card_boundary">
+        <div class="slds-card__header">
+            <h3 class="slds-text-heading_small">Select Change Types</h3>
+        </div>
+        
+        <div class="slds-card__body slds-card__body_inner">
+            <!-- Change Type Options -->
+            <div class="slds-form-element">
+                <div class="slds-form-element__control">
+                    <div class={serviceModelOptionClass} onclick={handleChangeTypeToggle} data-type="changeServiceModel">
+                        <div class="slds-media slds-media_center">
+                            <div class="slds-media__figure">
+                                <lightning-icon 
+                                    icon-name={serviceModelIcon} 
+                                    size="small" 
+                                    class={serviceModelIconClass}>
+                                </lightning-icon>
+                            </div>
+                            <div class="slds-media__body">
+                                <div class="slds-text-heading_small">Change Service Model</div>
+                                <div if:true={selectedChangeTypes.changeServiceModel} class="slds-text-color_success slds-text-body_small">Selected</div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Service Model Selection -->
+                    <div if:true={selectedChangeTypes.changeServiceModel} class="slds-m-left_large slds-m-top_small">
+                        <lightning-combobox
+                            label="New Service Model"
+                            placeholder="Select service model..."
+                            options={serviceModelOptions}
+                            value={changeValues.serviceModel}
+                            onchange={handleServiceModelChange}
+                            required>
+                        </lightning-combobox>
+                    </div>
+                </div>
+            </div>
+
+            <div class="slds-form-element slds-m-top_medium">
+                <div class="slds-form-element__control">
+                    <div class={pricingModelOptionClass} onclick={handleChangeTypeToggle} data-type="changePricingModel">
+                        <div class="slds-media slds-media_center">
+                            <div class="slds-media__figure">
+                                <lightning-icon 
+                                    icon-name={pricingModelIcon} 
+                                    size="small" 
+                                    class={pricingModelIconClass}>
+                                </lightning-icon>
+                            </div>
+                            <div class="slds-media__body">
+                                <div class="slds-text-heading_small">Change Pricing Model</div>
+                                <div if:true={selectedChangeTypes.changePricingModel} class="slds-text-color_success slds-text-body_small">Selected</div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Pricing Model Selection -->
+                    <div if:true={selectedChangeTypes.changePricingModel} class="slds-m-left_large slds-m-top_small">
+                        <lightning-combobox
+                            label="New Pricing Model"
+                            placeholder="Select pricing model..."
+                            options={pricingModelOptions}
+                            value={changeValues.pricingModel}
+                            onchange={handlePricingModelChange}
+                            required>
+                        </lightning-combobox>
+                    </div>
+                </div>
+            </div>
+
+            <div class="slds-form-element slds-m-top_medium">
+                <div class="slds-form-element__control">
+                    <div class={termOptionClass} onclick={handleChangeTypeToggle} data-type="changeTerm">
+                        <div class="slds-media slds-media_center">
+                            <div class="slds-media__figure">
+                                <lightning-icon 
+                                    icon-name={termIcon} 
+                                    size="small" 
+                                    class={termIconClass}>
+                                </lightning-icon>
+                            </div>
+                            <div class="slds-media__body">
+                                <div class="slds-text-heading_small">Change Term</div>
+                                <div if:true={selectedChangeTypes.changeTerm} class="slds-text-color_success slds-text-body_small">Selected</div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Term Fields -->
+                    <div if:true={selectedChangeTypes.changeTerm} class="slds-m-left_large slds-m-top_small">
+                        <div class="slds-grid slds-gutters">
+                            <div class="slds-col slds-size_1-of-3">
+                                <lightning-input
+                                    type="number"
+                                    label="Term Length (months)"
+                                    value={changeValues.termLength}
+                                    onchange={handleTermLengthChange}
+                                    min="1"
+                                    max="120"
+                                    required>
+                                </lightning-input>
+                            </div>
+                            <div class="slds-col slds-size_1-of-3">
+                                <lightning-input
+                                    type="number"
+                                    label="Opt-out Days"
+                                    value={changeValues.optOutDays}
+                                    onchange={handleOptOutDaysChange}
+                                    min="0"
+                                    max="365">
+                                </lightning-input>
+                            </div>
+                            <div class="slds-col slds-size_1-of-3">
+                                <lightning-input
+                                    type="number"
+                                    label="Renewal Term (months)"
+                                    value={changeValues.renewalTerm}
+                                    onchange={handleRenewalTermChange}
+                                    min="1"
+                                    max="120">
+                                </lightning-input>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="slds-form-element slds-m-top_medium">
+                <div class="slds-form-element__control">
+                    <div class={priceOptionClass} onclick={handleChangeTypeToggle} data-type="changePrice">
+                        <div class="slds-media slds-media_center">
+                            <div class="slds-media__figure">
+                                <lightning-icon 
+                                    icon-name={priceIcon} 
+                                    size="small" 
+                                    class={priceIconClass}>
+                                </lightning-icon>
+                            </div>
+                            <div class="slds-media__body">
+                                <div class="slds-text-heading_small">Change Price</div>
+                                <div if:true={selectedChangeTypes.changePrice} class="slds-text-color_success slds-text-body_small">Selected</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="slds-form-element slds-m-top_medium">
+                <div class="slds-form-element__control">
+                    <div class={productOptionClass} onclick={handleChangeTypeToggle} data-type="changeProduct">
+                        <div class="slds-media slds-media_center">
+                            <div class="slds-media__figure">
+                                <lightning-icon 
+                                    icon-name={productIcon} 
+                                    size="small" 
+                                    class={productIconClass}>
+                                </lightning-icon>
+                            </div>
+                            <div class="slds-media__body">
+                                <div class="slds-text-heading_small">Change Product</div>
+                                <div if:true={selectedChangeTypes.changeProduct} class="slds-text-color_success slds-text-body_small">Selected</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="slds-form-element slds-m-top_medium">
+                <div class="slds-form-element__control">
+                    <div class={abatementOptionClass} onclick={handleChangeTypeToggle} data-type="addAbatement">
+                        <div class="slds-media slds-media_center">
+                            <div class="slds-media__figure">
+                                <lightning-icon 
+                                    icon-name={abatementIcon} 
+                                    size="small" 
+                                    class={abatementIconClass}>
+                                </lightning-icon>
+                            </div>
+                            <div class="slds-media__body">
+                                <div class="slds-text-heading_small">Add Abatement</div>
+                                <div if:true={selectedChangeTypes.addAbatement} class="slds-text-color_success slds-text-body_small">Selected</div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Abatement Period -->
+                    <div if:true={selectedChangeTypes.addAbatement} class="slds-m-left_large slds-m-top_small">
+                        <lightning-input
+                            type="number"
+                            label="Abatement Period (days)"
+                            value={changeValues.abatementPeriod}
+                            onchange={handleAbatementPeriodChange}
+                            min="1"
+                            max="365"
+                            required>
+                        </lightning-input>
+                    </div>
+                </div>
+            </div>
+
+            <div class="slds-form-element slds-m-top_medium">
+                <div class="slds-form-element__control">
+                    <div class={coTermOptionClass} onclick={handleChangeTypeToggle} data-type="coTermContracts">
+                        <div class="slds-media slds-media_center">
+                            <div class="slds-media__figure">
+                                <lightning-icon 
+                                    icon-name={coTermIcon} 
+                                    size="small" 
+                                    class={coTermIconClass}>
+                                </lightning-icon>
+                            </div>
+                            <div class="slds-media__body">
+                                <div class="slds-text-heading_small">Co-Term Contracts</div>
+                                <div if:true={selectedChangeTypes.coTermContracts} class="slds-text-color_success slds-text-body_small">Selected</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+            <!-- Effective Date -->
+            <div class="slds-form-element slds-m-top_medium">
+                <label class="slds-form-element__label">
+                    <abbr class="slds-required" title="required">*</abbr>
+                    Effective Date
+                </label>
+                <div class="slds-form-element__control">
+                    <lightning-input
+                        type="date"
+                        value={changeValues.effectiveDate}
+                        onchange={handleEffectiveDateChange}
+                        min={todayDate}
+                        required>
+                    </lightning-input>
+                </div>
+            </div>
+        </div>
+
+        <!-- Validation Messages -->
+        <div if:true={showValidationError} class="slds-card__footer">
+            <div class="slds-notify slds-notify_alert slds-theme_error">
+                <span class="slds-assistive-text">Error</span>
+                <span class="slds-icon_container slds-icon-utility-error">
+                    <lightning-icon icon-name="utility:error" size="x-small"></lightning-icon>
+                </span>
+                <h2 class="slds-text-heading_small">{validationMessage}</h2>
+            </div>
+        </div>
+    </div>
+</template>

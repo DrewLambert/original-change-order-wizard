@@ -1,0 +1,269 @@
+<template>
+    <div class="summary-container">
+        <!-- Quick Summary Header -->
+        <div if:true={showSummaryStats} class="summary-header slds-m-bottom_large">
+            <h3 class="slds-text-heading_medium slds-m-bottom_small">Change Order Summary</h3>
+            <div class="summary-stats slds-grid slds-wrap slds-gutters_small">
+                <div class="slds-col slds-size_1-of-3">
+                    <div class="stat-card">
+                        <div class="stat-number slds-text-color_success">{opportunityCount}</div>
+                        <div class="stat-label">Opportunities</div>
+                    </div>
+                </div>
+                <div class="slds-col slds-size_1-of-3">
+                    <div class="stat-card">
+                        <div class="stat-number slds-text-color_warning">{changeTypeCount}</div>
+                        <div class="stat-label">Change Types</div>
+                    </div>
+                </div>
+                <div class="slds-col slds-size_1-of-3">
+                    <div class="stat-card">
+                        <div class={valueImpactClass}>
+                            <lightning-formatted-number
+                                value={totalValueImpact}
+                                format-style="currency"
+                                currency-code="USD">
+                            </lightning-formatted-number>
+                        </div>
+                        <div class="stat-label">Value Impact</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Opportunities Section -->
+        <div class="details-section slds-m-bottom_medium">
+            <h4 class="section-title">
+                <lightning-icon icon-name="utility:opportunity" size="small" class="slds-m-right_x-small"></lightning-icon>
+                Selected Opportunities ({opportunityCount})
+            </h4>
+            <div class="opportunity-list">
+                <template for:each={opportunityData} for:item="opp">
+                    <div key={opp.Id} class="opportunity-item">
+                        <div class="opportunity-header">
+                            <span class="opportunity-name">{opp.Name}</span>
+                            <span class="opportunity-amount">
+                                <lightning-formatted-number
+                                    value={opp.Amount}
+                                    format-style="currency"
+                                    currency-code="USD">
+                                </lightning-formatted-number>
+                            </span>
+                        </div>
+                        <div class="opportunity-details">
+                            <span class="detail-item">
+                                <span class="detail-label">Stage:</span> {opp.StageName}
+                            </span>
+                            <span class="detail-item">
+                                <span class="detail-label">Close Date:</span>&nbsp;
+                                <lightning-formatted-date-time
+                                    value={opp.CloseDate}
+                                    year="numeric"
+                                    month="short"
+                                    day="2-digit">
+                                </lightning-formatted-date-time>
+                            </span>
+                        </div>
+                    </div>
+                </template>
+            </div>
+        </div>
+
+        <!-- Two-Column Layout for Change Types and Product Changes -->
+        <div if:true={enableTwoColumnSummary} class="details-section slds-m-bottom_medium">
+            <div class="two-column-layout">
+                <!-- Left Column: Change Types -->
+                <div class="left-column">
+                    <h4 class="section-title">
+                        <lightning-icon icon-name="utility:settings" size="small" class="slds-m-right_x-small"></lightning-icon>
+                        Change Types ({changeTypeCount})
+                    </h4>
+                    <div class="change-types-grid">
+                        <template for:each={changeTypeDetails} for:item="change">
+                            <div key={change.label} class="change-type-item">
+                                <div class="change-type-header">
+                                    <lightning-icon icon-name="utility:check" size="xx-small" class="check-icon"></lightning-icon>
+                                    <span class="change-type-label">{change.label}</span>
+                                </div>
+                                <div if:true={change.value} class="change-type-value">{change.value}</div>
+                            </div>
+                        </template>
+                    </div>
+                </div>
+
+                <!-- Right Column: Product Changes -->
+                <div if:true={hasProductChanges} class="right-column">
+                    <h4 class="section-title">
+                        <lightning-icon icon-name="utility:product" size="small" class="slds-m-right_x-small"></lightning-icon>
+                        Product Changes ({productCount})
+                    </h4>
+                    <div class="product-changes-list">
+                        <template for:each={productChangeDetails} for:item="change">
+                            <div key={change.lineItemId} class="product-change-item">
+                                <div class="product-change-header">
+                                    <span class="opportunity-ref">{change.opportunityName}</span>
+                                    <span class={change.impactClass}>
+                                        <lightning-formatted-number
+                                            value={change.impact}
+                                            format-style="currency"
+                                            currency-code="USD">
+                                        </lightning-formatted-number>
+                                    </span>
+                                </div>
+                                <div class="product-change-details">
+                                    <div class="product-change-row">
+                                        <span class="detail-label">From:</span> 
+                                        <span class="product-name">{change.originalProduct}</span>
+                                        <span class="price-value">
+                                            <lightning-formatted-number
+                                                value={change.originalPrice}
+                                                format-style="currency"
+                                                currency-code="USD">
+                                            </lightning-formatted-number>
+                                        </span>
+                                    </div>
+                                    <div class="product-change-row">
+                                        <span class="detail-label">To:</span> 
+                                        <span class="product-name">{change.newProductName}</span>
+                                        <span class="price-value">
+                                            <lightning-formatted-number
+                                                value={change.newPrice}
+                                                format-style="currency"
+                                                currency-code="USD">
+                                            </lightning-formatted-number>
+                                        </span>
+                                        <lightning-badge 
+                                            label={change.revenueTypeLabel} 
+                                            class={change.revenueTypeBadgeClass}>
+                                        </lightning-badge>
+                                    </div>
+                                </div>
+                            </div>
+                        </template>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Single-Column Layout for Change Types and Product Changes -->
+        <div if:false={enableTwoColumnSummary}>
+            <!-- Change Types Section -->
+            <div class="details-section slds-m-bottom_medium">
+                <h4 class="section-title">
+                    <lightning-icon icon-name="utility:settings" size="small" class="slds-m-right_x-small"></lightning-icon>
+                    Change Types ({changeTypeCount})
+                </h4>
+                <div class="change-types-grid">
+                    <template for:each={changeTypeDetails} for:item="change">
+                        <div key={change.label} class="change-type-item">
+                            <div class="change-type-header">
+                                <lightning-icon icon-name="utility:check" size="xx-small" class="check-icon"></lightning-icon>
+                                <span class="change-type-label">{change.label}</span>
+                            </div>
+                            <div if:true={change.value} class="change-type-value">{change.value}</div>
+                        </div>
+                    </template>
+                </div>
+            </div>
+
+            <!-- Product Changes Section -->
+            <div if:true={hasProductChanges} class="details-section slds-m-bottom_medium">
+                <h4 class="section-title">
+                    <lightning-icon icon-name="utility:product" size="small" class="slds-m-right_x-small"></lightning-icon>
+                    Product Changes ({productCount})
+                </h4>
+                <div class="product-changes-list">
+                    <template for:each={productChangeDetails} for:item="change">
+                        <div key={change.lineItemId} class="product-change-item">
+                            <div class="product-change-header">
+                                <span class="opportunity-ref">{change.opportunityName}</span>
+                                <span class={change.impactClass}>
+                                    <lightning-formatted-number
+                                        value={change.impact}
+                                        format-style="currency"
+                                        currency-code="USD">
+                                    </lightning-formatted-number>
+                                </span>
+                            </div>
+                            <div class="product-change-details">
+                                <div class="product-change-row">
+                                    <span class="detail-label">From:</span> 
+                                    <span class="product-name">{change.originalProduct}</span>
+                                    <span class="price-value">
+                                        <lightning-formatted-number
+                                            value={change.originalPrice}
+                                            format-style="currency"
+                                            currency-code="USD">
+                                        </lightning-formatted-number>
+                                    </span>
+                                </div>
+                                <div class="product-change-row">
+                                    <span class="detail-label">To:</span> 
+                                    <span class="product-name">{change.newProductName}</span>
+                                    <span class="price-value">
+                                        <lightning-formatted-number
+                                            value={change.newPrice}
+                                            format-style="currency"
+                                            currency-code="USD">
+                                        </lightning-formatted-number>
+                                    </span>
+                                    <lightning-badge 
+                                        label={change.revenueTypeLabel} 
+                                        class={change.revenueTypeBadgeClass}>
+                                    </lightning-badge>
+                                </div>
+                            </div>
+                        </div>
+                    </template>
+                </div>
+            </div>
+        </div>
+
+        <!-- Contract Details Section -->
+        <div class="details-section slds-m-bottom_large">
+            <h4 class="section-title">
+                <lightning-icon icon-name="utility:contract" size="small" class="slds-m-right_x-small"></lightning-icon>
+                Contract Details
+            </h4>
+            <div class="contract-details">
+                <div class="detail-item">
+                    <span class="detail-label">Effective Date:</span>
+                    <lightning-formatted-date-time
+                        value={changeValues.effectiveDate}
+                        year="numeric"
+                        month="long"
+                        day="2-digit">
+                    </lightning-formatted-date-time>
+                </div>
+            </div>
+        </div>
+
+        <!-- Warnings -->
+        <div if:true={hasWarnings} class="warning-section slds-m-bottom_medium">
+            <div class="warning-content">
+                <lightning-icon icon-name="utility:warning" size="small" class="warning-icon"></lightning-icon>
+                <div class="warning-text">
+                    <h4 class="warning-title">Please review the following warnings:</h4>
+                    <ul class="warning-list">
+                        <template for:each={warnings} for:item="warning">
+                            <li key={warning}>{warning}</li>
+                        </template>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- Confirmation -->
+        <div class="confirmation-section">
+            <div class="confirmation-checkbox">
+                <lightning-input
+                    type="checkbox"
+                    label="I have reviewed all changes and confirm they are correct"
+                    checked={isConfirmed}
+                    onchange={handleConfirmationChange}
+                    required>
+                </lightning-input>
+            </div>
+        </div>
+    </div>
+</template>

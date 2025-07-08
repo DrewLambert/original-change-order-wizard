@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>New_Service_Model__c</fullName>
+    <label>New Service Model</label>
+    <required>false</required>
+    <trackTrending>false</trackTrending>
+    <type>Picklist</type>
+    <valueSet>
+        <restricted>true</restricted>
+        <valueSetDefinition>
+            <sorted>false</sorted>
+            <value>
+                <fullName>Bevi Basic</fullName>
+                <default>false</default>
+                <label>Bevi Basic</label>
+            </value>
+            <value>
+                <fullName>Full Service</fullName>
+                <default>false</default>
+                <label>Full Service</label>
+            </value>
+            <value>
+                <fullName>Partial Service</fullName>
+                <default>false</default>
+                <label>Partial Service</label>
+            </value>
+            <value>
+                <fullName>Self Service</fullName>
+                <default>false</default>
+                <label>Self Service</label>
+            </value>
+        </valueSetDefinition>
+    </valueSet>
+</CustomField>
